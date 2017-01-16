@@ -5,14 +5,19 @@ SetWorkingDir %A_ScriptDir%	 ; Ensures a consistent starting directory.
 DetectHiddenText, On
 DetectHiddenWindows, On
 #Hotstring EndChars `t
-CoordMode, Mouse, Client
-GuiSize:
-		GuiWidth = %A_GuiWidth%
-		GuiHeight = %A_GuiHeight%
-		ScreenWidth = %A_ScreenWidth%
-		ScreenHeight = %A_ScreenHeight%
+
+;GuiSize:
+		;GuiWidth = %A_GuiWidth%
+		;GuiHeight = %A_GuiHeight%
+		;ScreenWidth = %A_ScreenWidth%
+		;ScreenHeight = %A_ScreenHeight%
 		;MsgBox % A_ScreenHeight . " " . GuiHeight . " - " . y
 		Return
+		
+		
++!r::
+	Reload
+	Return
 
 
 ;; SET UP WORKSTATION ;;
@@ -139,7 +144,7 @@ Insurance()
 		Dash1()	  
 		return
    }
-   ButtonIBX:
+   ButtonIBC:
    {
 		elig := "https://navinet.navimedix.com/insurers/ibc?start"
 		ins := "IBC PERSONAL CHOICE DME"
@@ -212,44 +217,48 @@ Insurance()
 
 InsLabel()
 {
-	if (ins = MEDICAID DME){
+	global
+	
+	if (!ins){
+		return "None"
+	}
+	if (ins = "MEDICAID DME"){
 		return "Medicaid"
 	}
-	if (ins = Qualcare){
+	if (ins = "Qualcare"){
 		return "Qualcare"
 	}
-	if (ins = GENTIVA CARECENTRIX DME){
+	if (ins = "GENTIVA CARECENTRIX DME"){
 		return "Cigna"
 	}
-	if (ins = AETNA){
+	if (ins = "AETNA"){
 		return "Aetna"
 	}
-	if (ins = AMERIGROUP - NJ MEDICAID DME){
+	if (ins = "AMERIGROUP - NJ MEDICAID DME"){
 		return "Amerigroup"
 	}
-	if (ins = AMERIHEALTH - New Jersey DME){
+	if (ins = "AMERIHEALTH - New Jersey DME"){
 		return "Amerihealth"
 	}
-	if (ins = AMERIHEALTH  ADMINISTRATORS DME){
+	if (ins = "AMERIHEALTH  ADMINISTRATORS DME"){
 		return "Amerihealth Admin"
 	}
-	if (ins = IBC PERSONAL CHOICE DME){
+	if (ins = "IBC PERSONAL CHOICE DME"){
 		return "IBC"
 	}
-	if (ins = United Healthcare){
+	if (ins = "United Healthcare"){
 		return "UnitedHealthCare"
 	}
-	if (ins = AMERICHOICE DME II){
+	if (ins = "AMERICHOICE DME II"){
 		return "Americhoice"
 	}
-	if (ins = Carecentrix Horizon DME){
+	if (ins = "Carecentrix Horizon DME"){
 		return "Horizon Blue Card"
 	}
-	if (ins = Horizon NJ Health DME){
+	if (ins = "Horizon NJ Health DME"){
 		return "Horizon NJ Health"
-	} else{
-		return "Other"
 	}
+	return "Other"
 }
 
 Dash1()
@@ -271,7 +280,8 @@ Dash1()
 	if Alt
 		Gui, Add, Button, x+m, Alt
 	Gui, Show, AutoSize x1215 y10
-	;MsgBox, %GuiWidth% . " " . %GuiHeight%
+	;MsgBox, %GuiWidth% . " " . %GuiHeight
+	Gui, Show, AutoSize x1215 y10
 	
 	Return
 	
@@ -323,13 +333,14 @@ Input()
 	Gui, Add, Edit, Uppercase vsn, %sn%
    
 	Gui, Add, Button, Default gOK, OK
-	MsgBox % GuiWidth - GuiHeight
 	
-	x := ScreenWidth - GuiWidth - 50
-	y := ScreenHeight - GuiHeight - 75
-	Gui, Show, AutoSize x%x% y%y%
+	Gui, Show, Autosize x1250 y15
+	;x := ScreenWidth - GuiWidth - 15
+	;y := ScreenHeight - GuiHeight - 95
+	;MsgBox % GuiWidth . " " . GuiHeight
+	;Gui, Show, x%x% y%y%
 	
-	;MsgBox, %GuiWidth% . " " . %GuiHeight%
+	
 	return
 
    OK:
@@ -352,7 +363,7 @@ Dashboard()
 	Gui, Add, Text, Center, Press Button to Copy Value`nOr type [Shortcut] and hit Tab`n
 	
 	if auth
-		Gui, Add, Link, xm, Auth - <a href="%auth%">Click</a>`n
+		Gui, Add, Link, xm, Auth - <a href="%auth%">Click</a>
 	if alert
 		Gui, Add, Text, xm, %alert%
 	if alt
@@ -387,9 +398,9 @@ Dashboard()
 	Gui, Add, Button, xm, Save
 	Gui, Add, Button, x+m, Update Values 
 	
-	x := ScreenWidth - GuiWidth - 50
-	y := ScreenHeight - GuiHeight - 75	
-	Gui, Show, AutoSize x%x% y%y%
+	Gui, Show, Autosize x1250 y 15
+
+	;Gui, Show, % "x" A_ScreenWidth - A_GuiWidth " y" A_ScreenHeight - A_GuiHeight " w" A_GuiWidth " h" A_GuiHeight
 	
 	;MsgBox % x . " " . y . " " . w . " " . h
 	;Gui, Show, x%A_GuiWidth% y%A_GuiHeight%
