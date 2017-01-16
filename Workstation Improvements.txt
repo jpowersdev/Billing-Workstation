@@ -1,7 +1,5 @@
 Variable Window Position Based on Window Size
 
-Equipment Manager - Rental search is window for Serial Number/F6 [FIGURE THIS OUT]
-
 Using wildcards in Window Names for selection
 
 Add separate insurance notes gui
