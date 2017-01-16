@@ -1,0 +1,7 @@
+
+1/13/2017
+---------------------------------------------------------------------------------------------------
++!i::Make it so it keeps hitting 6 until it sees the page for hitting 9
+Figure out why zip keeps disappearing
+make the f10 in hotstrings dependent on being in cpr plus
+Make it so hotstrings are universal, but you have to hit tab to activate them
