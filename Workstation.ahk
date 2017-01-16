@@ -6,6 +6,13 @@ DetectHiddenText, On
 DetectHiddenWindows, On
 #Hotstring EndChars `t
 CoordMode, Mouse, Client
+GuiSize:
+		GuiWidth = %A_GuiWidth%
+		GuiHeight = %A_GuiHeight%
+		ScreenWidth = %A_ScreenWidth%
+		ScreenHeight = %A_ScreenHeight%
+		;MsgBox % A_ScreenHeight . " " . GuiHeight . " - " . y
+		Return
 
 
 ;; SET UP WORKSTATION ;;
@@ -93,6 +100,7 @@ Insurance()
 	Gui, Add, Button,, &QUAL
 	Gui, Add, Button,, &MCAID
 	Gui, Show, AutoSize
+	;MsgBox, %GuiWidth% . " " . %GuiHeight%
 	return
 
    ButtonHNJH:
@@ -204,29 +212,40 @@ Insurance()
 
 InsLabel()
 {
-	if (ins := "MEDICAID DME"){
+	if (ins = MEDICAID DME){
 		return "Medicaid"
-	} else if (ins := "Qualcare"){
+	}
+	if (ins = Qualcare){
 		return "Qualcare"
-	} else if (ins := "GENTIVA CARECENTRIX DME"){
+	}
+	if (ins = GENTIVA CARECENTRIX DME){
 		return "Cigna"
-	} else if (ins := "AETNA"){
+	}
+	if (ins = AETNA){
 		return "Aetna"
-	} else if (ins := "AMERIGROUP - NJ MEDICAID DME"){
+	}
+	if (ins = AMERIGROUP - NJ MEDICAID DME){
 		return "Amerigroup"
-	} else if (ins := "AMERIHEALTH - New Jersey DME"){
+	}
+	if (ins = AMERIHEALTH - New Jersey DME){
 		return "Amerihealth"
-	} else if (ins := "AMERIHEALTH  ADMINISTRATORS DME"){
+	}
+	if (ins = AMERIHEALTH  ADMINISTRATORS DME){
 		return "Amerihealth Admin"
-	} else if (ins := "IBC PERSONAL CHOICE DME"){
+	}
+	if (ins = IBC PERSONAL CHOICE DME){
 		return "IBC"
-	} else if (ins := "United Healthcare"){
+	}
+	if (ins = United Healthcare){
 		return "UnitedHealthCare"
-	} else if (ins := "AMERICHOICE DME II"){
+	}
+	if (ins = AMERICHOICE DME II){
 		return "Americhoice"
-	} else if (ins := "Carecentrix Horizon DME"){
+	}
+	if (ins = Carecentrix Horizon DME){
 		return "Horizon Blue Card"
-	} else if (ins := "Horizon NJ Health DME"){
+	}
+	if (ins = Horizon NJ Health DME){
 		return "Horizon NJ Health"
 	} else{
 		return "Other"
@@ -252,6 +271,8 @@ Dash1()
 	if Alt
 		Gui, Add, Button, x+m, Alt
 	Gui, Show, AutoSize x1215 y10
+	;MsgBox, %GuiWidth% . " " . %GuiHeight%
+	
 	Return
 	
 	ButtonNext:
@@ -302,7 +323,13 @@ Input()
 	Gui, Add, Edit, Uppercase vsn, %sn%
    
 	Gui, Add, Button, Default gOK, OK
-	Gui, Show, AutoSize x1250 y10
+	MsgBox % GuiWidth - GuiHeight
+	
+	x := ScreenWidth - GuiWidth - 50
+	y := ScreenHeight - GuiHeight - 75
+	Gui, Show, AutoSize x%x% y%y%
+	
+	;MsgBox, %GuiWidth% . " " . %GuiHeight%
 	return
 
    OK:
@@ -358,8 +385,14 @@ Dashboard()
 	Gui, Add, Button, xm, Serial Number [sn]
 	Gui, Add, Text, x+m yp+7, %sn%`n`n
 	Gui, Add, Button, xm, Save
-	Gui, Add, Button, x+m, Update Values
-	Gui, Show, AutoSize x1250 y10
+	Gui, Add, Button, x+m, Update Values 
+	
+	x := ScreenWidth - GuiWidth - 50
+	y := ScreenHeight - GuiHeight - 75	
+	Gui, Show, AutoSize x%x% y%y%
+	
+	;MsgBox % x . " " . y . " " . w . " " . h
+	;Gui, Show, x%A_GuiWidth% y%A_GuiHeight%
 	return
 	
 	ButtonLastName[ln]:
@@ -536,7 +569,7 @@ Read()
 		Gui, Submit
 	}
 	
-	Loop, Read, "../billing.csv"
+	Loop, Read, ../billing.csv
 	{
 		StringReplace, Cleaned, A_LoopReadLine, `%, , All
 		Record := StrSplit(Cleaned,",") 
@@ -648,8 +681,9 @@ LoadPatient(LoadFile)
 	Loop
 	{
 		IfWinActive, Equipment Manager - Rental search
-			Sleep, 2600
-			Send %sn%
+			Sleep, 1200
+			SendInput %sn%
+			Sleep, 1200
 			Break
 		Sleep, 200
 	}
