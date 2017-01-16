@@ -15,6 +15,19 @@ DetectHiddenWindows, On
 		Return
 		
 		
+DesktopScreenCoordinates(byref Xmin, byref Ymin, byref Xmax, byref Ymax)
+{
+	SysGet, Xmin, 76 	; XVirtualScreenleft  	; left side of virtual screen
+	SysGet, Ymin, 77	; YVirtualScreenTop		; Top side of virtual screen
+
+	SysGet, VirtualScreenWidth, 78
+	SysGet, VirtualScreenHeight, 79
+
+	Xmax := Xmin + VirtualScreenWidth - 10
+	Ymax := Ymin + VirtualScreenHeight
+	return
+} 
+		
 +!r::
 	Reload
 	Return
@@ -91,6 +104,8 @@ ClearPatient()
 Insurance()
 {
 	global 
+	
+	DesktopScreenCoordinates(xn,yn,xx,yx)
 
 	Gui, New, AlwaysOnTop
 	Gui, Font, s14, Helvetica
@@ -105,7 +120,8 @@ Insurance()
 	Gui, Add, Button,, &QUAL
 	Gui, Add, Button,, &MCAID
 	Gui, Show, AutoSize
-	;MsgBox, %GuiWidth% . " " . %GuiHeight%
+	WinGetPos,,, Width, Height, Workstation.ahk
+    WinMove, Workstation.ahk,, xx -(Width), yn + 135
 	return
 
    ButtonHNJH:
@@ -279,9 +295,10 @@ Dash1()
 	Gui, Add, Button,, Next
 	if Alt
 		Gui, Add, Button, x+m, Alt
-	Gui, Show, AutoSize x1215 y10
-	;MsgBox, %GuiWidth% . " " . %GuiHeight
-	Gui, Show, AutoSize x1215 y10
+	Gui, Show, AutoSize
+	WinGetPos,,, Width, Height, Workstation.ahk
+    WinMove, Workstation.ahk,, xx -(Width), yn + 135
+
 	
 	Return
 	
@@ -334,13 +351,9 @@ Input()
    
 	Gui, Add, Button, Default gOK, OK
 	
-	Gui, Show, Autosize x1250 y15
-	;x := ScreenWidth - GuiWidth - 15
-	;y := ScreenHeight - GuiHeight - 95
-	;MsgBox % GuiWidth . " " . GuiHeight
-	;Gui, Show, x%x% y%y%
-	
-	
+	Gui, Show, Autosize
+	WinGetPos,,, Width, Height, Workstation.ahk
+    WinMove, Workstation.ahk,, xx -(Width), yn + 135
 	return
 
    OK:
@@ -397,13 +410,9 @@ Dashboard()
 	Gui, Add, Text, x+m yp+7, %sn%`n`n
 	Gui, Add, Button, xm, Save
 	Gui, Add, Button, x+m, Update Values 
-	
-	Gui, Show, Autosize x1250 y 15
-
-	;Gui, Show, % "x" A_ScreenWidth - A_GuiWidth " y" A_ScreenHeight - A_GuiHeight " w" A_GuiWidth " h" A_GuiHeight
-	
-	;MsgBox % x . " " . y . " " . w . " " . h
-	;Gui, Show, x%A_GuiWidth% y%A_GuiHeight%
+	Gui, Show
+	WinGetPos,,, Width, Height, Workstation.ahk
+    WinMove, Workstation.ahk,, xx -(Width), yn + 135
 	return
 	
 	ButtonLastName[ln]:
@@ -538,6 +547,7 @@ Load()
 	Gui, Add, Button,, &Date of Service
 	Gui, Add, Button,, Insurance &ID
 	Gui, Show
+	
 	Return
 	
 	ButtonLastName:
