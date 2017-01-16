@@ -65,9 +65,10 @@ ClearPatient()
 	npi := ""
 	elig := ""
 	auth := ""
-	alt := ""
 	ins := ""
+	alt := ""
 	altnotes := ""
+	altelig := ""
 	notes := ""
 	created := A_Now
 	
@@ -108,6 +109,7 @@ Insurance()
 		elig := "https://navinet.navimedix.com/insurers/horizon?start"
 		ins := "Carecentrix Horizon DME"
 		notes := "Horizon Blue Cross Blue Shield`n1-800-355-2583`nThree-Letter Prefix`nAuth through CareCentrix"
+		alert := "Three Letter Prefix"
 		auth := "https://www.carecentrixportal.com/ProviderPortal/homePage.do"
 		Gui, Submit
 		Dash1()
@@ -120,7 +122,8 @@ Insurance()
 		notes := "United Healthcare`n877-842-3210`nNo Auth Required`nInsurance ID Starts with 8 or 9"
 
 		alt := "AMERICHOICE DME II"
-		altnotes := "UHCCP/Americhoice`n1-888-362-3368`nMUST USE NBN 03`nNo Auth Required`nInsurance ID Starts with 1"
+		altnotes := "UHCCP/Americhoice`n1-888-362-3368`nNo Auth Required`nInsurance ID Starts with 1"
+		altalert := "MUST USE NBN 03"
 		Gui, Submit
 		Dash1()	  
 		return
@@ -169,6 +172,7 @@ Insurance()
 		elig := "https://navinet.navimedix.com/insurers/cigna?start"
 		ins := "GENTIVA CARECENTRIX DME"
 		notes := "Cigna`800-794-7882`nAuth through CareCentrix as 'Cigna PPO'"
+		alert := "Auth Cigna PPO"
 		auth := "https://www.carecentrixportal.com/ProviderPortal/homePage.do"
 		Gui, Submit
 		Dash1()	  
@@ -187,10 +191,42 @@ Insurance()
    {
 		elig := "https://www.njmmis.com/mevs.aspx"
 		ins := "MEDICAID DME"
-		notes := "Medicaid`nCall for Eligibility`n800-776-6334`nMUST HAVE SCRIPT`nNo Auth Required"
+		notes := "Medicaid`nCall for Eligibility`n800-776-6334`nNo Auth Required"
+		alert := "MUST HAVE SCRIPT"
 		Gui, Submit
 		Dash1()
 		return
+	}
+}
+
+InsLabel()
+{
+	if (ins := "MEDICAID DME"){
+		return "Medicaid"
+	} else if (ins := "Qualcare"){
+		return "Qualcare"
+	} else if (ins := "GENTIVA CARECENTRIX DME"){
+		return "Cigna"
+	} else if (ins := "AETNA"){
+		return "Aetna"
+	} else if (ins := "AMERIGROUP - NJ MEDICAID DME"){
+		return "Amerigroup"
+	} else if (ins := "AMERIHEALTH - New Jersey DME"){
+		return "Amerihealth"
+	} else if (ins := "AMERIHEALTH  ADMINISTRATORS DME"){
+		return "Amerihealth Admin"
+	} else if (ins := "IBC PERSONAL CHOICE DME"){
+		return "IBC"
+	} else if (ins := "United Healthcare"){
+		return "UnitedHealthCare"
+	} else if (ins := "AMERICHOICE DME II"){
+		return "Americhoice"
+	} else if (ins := "Carecentrix Horizon DME"){
+		return "Horizon Blue Card"
+	} else if (ins := "Horizon NJ Health DME"){
+		return "Horizon NJ Health"
+	} else{
+		return "Other"
 	}
 }
 
@@ -278,14 +314,18 @@ Dashboard()
 {
 	global
 	
-	insure = SubStr, %ins%, 1, 6
+	insure := InsLabel()
 
 	Gui, New, AlwaysOnTop
 	Gui, Font, s13, Helvetica
 	Gui, Add, Text, Center, Press Button to Copy Value`nOr type [Shortcut] and hit Tab`n
 	
 	if auth
-		Gui, Add, Link, x+m yp+7, Auth - <a href="%auth%">Click</a>`n
+		Gui, Add, Link, xm, Auth - <a href="%auth%">Click</a>`n
+	if alert
+		Gui, Add, Text, xm, %alert%
+	if alt
+		Gui, Add, Text, xm, %altalert%
    
 	Gui, Add, Button, xm, Last Name [ln]
 	Gui, Add, Text, x+m yp+7, %ln%
@@ -309,7 +349,7 @@ Dashboard()
 	Gui, Add, Text, x+m yp+7, %iid%
 	Gui, Add, Button, xm, NPI [npi]
 	Gui, Add, Text, x+m yp+7, %npi%
-	Gui, Add, Button, xm, Insurance Company [ins]
+	Gui, Add, Button, xm, Insurance [ins]
 	Gui, Add, Text, x+m yp+7, %insure%
 	Gui, Add, Button, xm, Serial Number [sn]
 	Gui, Add, Text, x+m yp+7, %sn%`n`n
@@ -409,7 +449,7 @@ Save()
 	
 	try
 	{	
-		file := FileOpen("billing.csv", "a")
+		file := FileOpen("../billing.csv", "a")
 		;MsgBox, File Loaded
 		file.write(saveFile)
 		MsgBox, Successful Save!
@@ -492,7 +532,7 @@ Read()
 		Gui, Submit
 	}
 	
-	Loop, Read, billing.csv
+	Loop, Read, "../billing.csv"
 	{
 		StringReplace, Cleaned, A_LoopReadLine, `%, , All
 		Record := StrSplit(Cleaned,",") 
