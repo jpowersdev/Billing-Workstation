@@ -1,13 +1,4 @@
-Add Button for Straight Blue Card 
-800 676 2583
-
 Variable Window Position Based on Window Size
-
-Submitting values copies date of birth to clipboard
-
-Change Alt button on insurance popup to be next to the next button
-
-Add Alert to top of dashboard, such as NBN 03 or RX
 
 Equipment Manager - Rental search is window for Serial Number/F6 [FIGURE THIS OUT]
 

@@ -1,6 +1,6 @@
 ﻿#NoEnv	; Recommended for performance and compatibility with future AutoHotkey releases.
 ; #Warn	 ; Enable warnings to assist with detecting common errors.
-SendMode Input	; Recommended for new scripts due to its superior speed and reliability.
+sendmode Input	; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%	 ; Ensures a consistent starting directory.
 DetectHiddenText, On
 DetectHiddenWindows, On
@@ -83,15 +83,15 @@ Insurance()
 	Gui, New, AlwaysOnTop
 	Gui, Font, s14, Helvetica
 	Gui, Add, Button,, &HNJH
-	Gui, Add, Button,, H&BCBS
+	Gui, Add, Button,, &BLUE
 	Gui, Add, Button,, &UHC/AMC
-	Gui, Add, Button,, IB&X
+	Gui, Add, Button,, &IBC
 	Gui, Add, Button,, &AMH
 	Gui, Add, Button,, AM&G
 	Gui, Add, Button,, A&ET
-	Gui, Add, Button,, C&IG
+	Gui, Add, Button,, &CIG
 	Gui, Add, Button,, &QUAL
-	Gui, Add, Button,, MCAI&D
+	Gui, Add, Button,, &MCAID
 	Gui, Show, AutoSize
 	return
 
@@ -104,13 +104,16 @@ Insurance()
 		Dash1()
 		return
    }
-   ButtonHBCBS:
+   ButtonBLUE:
    {
 		elig := "https://navinet.navimedix.com/insurers/horizon?start"
 		ins := "Carecentrix Horizon DME"
-		notes := "Horizon Blue Cross Blue Shield`n1-800-355-2583`nThree-Letter Prefix`nAuth through CareCentrix"
+		notes := "In State`nHorizon BCBS`n1-800-355-2583`nAuth through CareCentrix"
 		alert := "Three Letter Prefix"
 		auth := "https://www.carecentrixportal.com/ProviderPortal/homePage.do"
+		
+		alt := "Carecentrix Blue Card DME"
+		altnotes := "Out of State`nCall for Eligibility`n1-800-676-2583`nNJ Residents:`nAuth through Carecentrix`nNon-Residents:`nAuth through Home Plan"
 		Gui, Submit
 		Dash1()
 		return
@@ -247,7 +250,7 @@ Dash1()
 	
 	Gui, Add, Button,, Next
 	if Alt
-		Gui, Add, Button,, Alt
+		Gui, Add, Button, x+m, Alt
 	Gui, Show, AutoSize x1215 y10
 	Return
 	
@@ -305,6 +308,7 @@ Input()
    OK:
 	{
 		Gui, Submit
+		clipboard := dob
 		Dashboard() 
 		return
 	}
@@ -601,6 +605,57 @@ LoadPatient(LoadFile)
 
 ; HOTKEYS
 
++!^i::
+{
+	PostMessage, 0x001C, 003305D4, 0, , CPR+ Equipment Manager
+
+}
+
++!i:: ;INVENTORY CHECK
+{	
+	;sn := "ad16I14124"
+	;SetMouseDelay, 250
+	WinActivate, ahk_exe cpr.exe
+	WinActivate, Main Menu
+	Sleep 600
+	Loop
+	{
+		IfWinActive, Main Menu
+			SendInput 6
+			Sleep, 600
+			Break
+		Sleep, 200
+	}
+	Sleep, 600
+	Loop
+	{
+		IfWinActive, Inventory Menu
+			SendInput 9
+			Sleep, 600
+			Break
+		Sleep, 200
+	}
+	WinActivate, CPR+ Equipment Manager
+	Sleep, 600
+	Loop
+	{	
+		IfWinActive, CPR+ Equipment Manager
+			SendInput {F6}
+			Sleep, 600
+			Break
+		Sleep, 200
+	}
+	Loop
+	{
+		IfWinActive, Equipment Manager - Rental search
+			Sleep, 2600
+			Send %sn%
+			Break
+		Sleep, 200
+	}
+	Send {F6}
+	return
+}
 ;
 
 
@@ -829,57 +884,6 @@ LoadPatient(LoadFile)
 }
 ;
 #IfWinActive
-
-+!i:: ;INVENTORY CHECK
-{	
-	;SetMouseDelay, 250
-	Loop
-	{
-		IfWinExist, ahk_exe cpr.exe
-			WinActivate, ahk_exe cpr.exe
-			Break
-		Sleep, 500
-	}
-	Loop
-	{
-		IfWinExist, Main Menu
-			Click 90, 207
-			Break
-		Sleep, 500
-	}
-	Loop
-	{
-		IfWinExist, Inventory Menu
-			Click 115, 300
-			Break
-		Sleep, 500
-	}
-	Loop
-	{	
-		IfWinExist, CPR+ Equipment Manager
-			Click -310, 620
-			Break
-		Sleep, 500
-	}
-	Loop
-	{
-		IfWinActive, Equipment Manager - Rental search
-			Sleep, 2500
-			SendInput, 212`%
-			Sleep, 2500
-			Click 710, 520
-			Break
-		Sleep, 500
-	}
-	Loop
-	{
-		IfWinNotExist, Equipment Manager - Rental search
-			Click -310, 620
-			Break
-		Sleep, 500
-	}
-	return
-}
 
 ;;
 ;; End CPR Script

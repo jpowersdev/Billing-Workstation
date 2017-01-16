@@ -5,3 +5,12 @@
 Figure out why zip keeps disappearing
 make the f10 in hotstrings dependent on being in cpr plus
 Make it so hotstrings are universal, but you have to hit tab to activate them
+
+
+1/16/2017
+----------------------------------------------------------------------------------------------------
+Change Alt button on insurance popup to be next to the next button
+Add Alert to top of dashboard, such as NBN 03 or RX
+Submitting values copies date of birth to clipboard
+Add Button for Straight Blue Card
+Equipment Manager - Rental search is window for Serial Number/F6
