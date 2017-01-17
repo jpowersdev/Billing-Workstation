@@ -6,32 +6,6 @@ DetectHiddenText, On
 DetectHiddenWindows, On
 #Hotstring EndChars `t
 
-;GuiSize:
-		;GuiWidth = %A_GuiWidth%
-		;GuiHeight = %A_GuiHeight%
-		;ScreenWidth = %A_ScreenWidth%
-		;ScreenHeight = %A_ScreenHeight%
-		;MsgBox % A_ScreenHeight . " " . GuiHeight . " - " . y
-		Return
-		
-		
-DesktopScreenCoordinates(byref Xmin, byref Ymin, byref Xmax, byref Ymax)
-{
-	SysGet, Xmin, 76 	; XVirtualScreenleft  	; left side of virtual screen
-	SysGet, Ymin, 77	; YVirtualScreenTop		; Top side of virtual screen
-
-	SysGet, VirtualScreenWidth, 78
-	SysGet, VirtualScreenHeight, 79
-
-	Xmax := Xmin + VirtualScreenWidth - 10
-	Ymax := Ymin + VirtualScreenHeight
-	return
-} 
-		
-+!r::
-	Reload
-	Return
-
 
 ;; SET UP WORKSTATION ;;
 
@@ -987,6 +961,23 @@ Thank you.
 
 #IfWinActive
 ; END ACROBAT
+
+DesktopScreenCoordinates(byref Xmin, byref Ymin, byref Xmax, byref Ymax)
+{
+	SysGet, Xmin, 76 	; XVirtualScreenleft  	; left side of virtual screen
+	SysGet, Ymin, 77	; YVirtualScreenTop		; Top side of virtual screen
+
+	SysGet, VirtualScreenWidth, 78
+	SysGet, VirtualScreenHeight, 79
+
+	Xmax := Xmin + VirtualScreenWidth - 10
+	Ymax := Ymin + VirtualScreenHeight
+	return
+} 
+		
++!r::
+	Reload
+	Return
 
 
 ;; GLOBALS ;;

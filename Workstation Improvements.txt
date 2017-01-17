@@ -1,5 +1,3 @@
-Variable Window Position Based on Window Size
-
 Using wildcards in Window Names for selection
 
 Add separate insurance notes gui

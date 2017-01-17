@@ -14,3 +14,4 @@ Add Alert to top of dashboard, such as NBN 03 or RX
 Submitting values copies date of birth to clipboard
 Add Button for Straight Blue Card
 Equipment Manager - Rental search is window for Serial Number/F6
+Variable Window Position Based on Window Size
