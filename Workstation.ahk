@@ -66,6 +66,7 @@ ClearPatient()
 	auth := ""
 	ins := ""
 	alt := ""
+	altalert := ""
 	altnotes := ""
 	altelig := ""
 	notes := ""
@@ -244,6 +245,9 @@ InsLabel()
 	}
 	if (ins = "Carecentrix Horizon DME"){
 		return "Horizon Blue Card"
+	}
+	if (ins = "Carecentrix Blue Card DME"){
+		return "Non-NJ Blue Card"
 	}
 	if (ins = "Horizon NJ Health DME"){
 		return "Horizon NJ Health"
@@ -947,16 +951,15 @@ LoadPatient(LoadFile)
 
 ::diag::
 (
-Attached consignment form is missing a diagnosis code.
+If you could just send a form back with a diagnosis code, I would really appreciate it.
 )
 
 ::sig::
 (
-Please return the complete form so it can be submitted to the insurance companies.
+Thanks so much!
 
-Questions, please call 856.669.0211. My extension is 200224.
-
-Thank you.
+Jonathan
+Ext. 200224
 )
 
 #IfWinActive
