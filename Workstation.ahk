@@ -28,6 +28,8 @@ IfWinNotExist, Novell GroupWise - Jonathan Powers
 
 +!n::
 {
+	DesktopScreenCoordinates(xn,yn,xx,yx)
+	
 	MsgBox, 3, New Patient, Create New Patient?`nPress 'No' to Load Existing
 	IfMsgBox, Yes
 	{
@@ -79,8 +81,6 @@ ClearPatient()
 Insurance()
 {
 	global 
-	
-	DesktopScreenCoordinates(xn,yn,xx,yx)
 
 	Gui, New, AlwaysOnTop
 	Gui, Font, s14, Helvetica
@@ -552,7 +552,7 @@ Load()
 	Gui, Add, Button, Default, &Last Name
 	Gui, Add, Button,, &Date of Service
 	Gui, Add, Button,, Insurance &ID
-	Gui, Show, Autosize
+	Gui, Show
 	WinGetPos,,, Width, Height, Workstation.ahk
     WinMove, Workstation.ahk,, xx -(Width), yn + 135
 	
@@ -589,7 +589,7 @@ Read()
 	Gui, Add, Text,, Enter Search Term
 	Gui, Add, Edit, vsearch
 	Gui, Add, Button, Default, Ok
-	Gui, Show, Autosize
+	Gui, Show
 	WinGetPos,,, Width, Height, Workstation.ahk
     WinMove, Workstation.ahk,, xx -(Width), yn + 135
 	Return
@@ -608,12 +608,17 @@ Read()
 		
 		if InStr(Record[index], search)
 		{
+			
+		}
+		
+		if InStr(Record[index], search)
+		{
 			Gui, New, AlwaysOntop
 			Gui, Add, Text,, Is This the Record?
 			Gui, Add, Text,, %parse%
 			Gui, Add, Button, Default, &Yes
 			Gui, Add, Button,, &No
-			Gui, Show, Autosize
+			Gui, Show
 			WinGetPos,,, Width, Height, Workstation.ahk
 			WinMove, Workstation.ahk,, xx -(Width), yn + 135
 			Return
