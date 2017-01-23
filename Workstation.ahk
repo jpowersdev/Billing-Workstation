@@ -487,27 +487,39 @@ Save()
 	Global
 	
 	record := Array(uid, created, A_Now, ln, fn, dob, zip, addr, ph, mf, dos, iid, sn, npi, ins)
-	saveFile := "`n"
+	saveFile := ""
 	
 	for index, value in record{
 		if (index = 15) {
-			saveFile := saveFile . value . "`n"
+			saveFile := saveFile . value . "`r`n" ;adds CR+LF after last field
 		}
 		Else {
 			saveFile := saveFile . value . ","
 		}
 	}
 	
+	uid := 0
+	
+	Loop, Read, ../billing.csv
+	{
+		StringReplace, Cleaned, A_LoopReadLine, `%, , All
+		Record := StrSplit(Cleaned,",")
+		uid := Record[1]
+	}
+	
+	uid += 1 
+	;Loops through, leaving uid as the uid of the last record
+	;in the file, then adds 1
+	
 	try
 	{	
 		file := FileOpen("../billing.csv", "a")
 		;MsgBox, File Loaded
-		file.write(saveFile)
-		MsgBox, Successful Save!
-		file.close()
 	} catch e{
-		MsgBox, Failed to Save!
+		MsgBox, File Not Found!
 	}
+		
+	
 	
 	MsgBox, 3, New Patient?, Create New Patient Now?
 	IfMsgBox, Yes
@@ -540,7 +552,9 @@ Load()
 	Gui, Add, Button, Default, &Last Name
 	Gui, Add, Button,, &Date of Service
 	Gui, Add, Button,, Insurance &ID
-	Gui, Show
+	Gui, Show, Autosize
+	WinGetPos,,, Width, Height, Workstation.ahk
+    WinMove, Workstation.ahk,, xx -(Width), yn + 135
 	
 	Return
 	
@@ -575,7 +589,9 @@ Read()
 	Gui, Add, Text,, Enter Search Term
 	Gui, Add, Edit, vsearch
 	Gui, Add, Button, Default, Ok
-	Gui, Show
+	Gui, Show, Autosize
+	WinGetPos,,, Width, Height, Workstation.ahk
+    WinMove, Workstation.ahk,, xx -(Width), yn + 135
 	Return
 	
 
@@ -597,7 +613,9 @@ Read()
 			Gui, Add, Text,, %parse%
 			Gui, Add, Button, Default, &Yes
 			Gui, Add, Button,, &No
-			Gui, Show
+			Gui, Show, Autosize
+			WinGetPos,,, Width, Height, Workstation.ahk
+			WinMove, Workstation.ahk,, xx -(Width), yn + 135
 			Return
 			
 			ButtonYes:
