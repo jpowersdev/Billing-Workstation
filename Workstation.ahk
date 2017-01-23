@@ -87,6 +87,7 @@ Insurance()
 	Gui, Add, Button,, &HNJH
 	Gui, Add, Button,, &BLUE
 	Gui, Add, Button,, &UHC/AMC
+	Gui, Add, Button,, UM&R
 	Gui, Add, Button,, &IBC
 	Gui, Add, Button,, &AMH
 	Gui, Add, Button,, AM&G
@@ -101,7 +102,7 @@ Insurance()
 
    ButtonHNJH:
    {
-		elig := "https://navinet.navimedix.com/insurers/hnjh?start"
+		elig := "https://navinet.navimedix.com/eligibility-benefits/hnjh/search"
 		ins := "Horizon NJ Health DME"
 		notes := "Horizon NJ Health`n800-682-9091`nNo Auth Required"
 		Gui, Submit
@@ -125,12 +126,21 @@ Insurance()
    ButtonUHC/AMC:
    {
 		elig := "https://ptpsr.uhc.com/prweb/CRExternal"
-		ins := "United Healthcare"
+		ins := "UNITED HEALTHCARE"
 		notes := "United Healthcare`n877-842-3210`nNo Auth Required`nInsurance ID Starts with 8 or 9"
 
 		alt := "AMERICHOICE DME II"
 		altnotes := "UHCCP/Americhoice`n1-888-362-3368`nNo Auth Required`nInsurance ID Starts with 1"
 		altalert := "MUST USE NBN 03"
+		Gui, Submit
+		Dash1()	  
+		return
+   }
+   ButtonUMR:
+   {
+		elig := ""
+		ins := "UMR CARE MANAGEMENT DME"
+		notes := "UMR`nUHC Third-Party Administrator`nCall 877-233-1800 for Eligibility"
 		Gui, Submit
 		Dash1()	  
 		return
@@ -189,7 +199,7 @@ Insurance()
    {
 		elig := "https://navinet.navimedix.com/insurers/qualcare?start"
 		ins := "Qualcare"
-		notes := "QualCare`n800-992-6613`No Auth Required"
+		notes := "QualCare`n800-992-6613`nNo Auth Required"
 		Gui, Submit
 		Dash1()
 		return
@@ -237,8 +247,11 @@ InsLabel()
 	if (ins = "IBC PERSONAL CHOICE DME"){
 		return "IBC"
 	}
-	if (ins = "United Healthcare"){
+	if (ins = "UNITED HEALTHCARE"){
 		return "UnitedHealthCare"
+	}
+	if (ins = "UMR CARE MANAGEMENT DME") {
+		return "UMR"
 	}
 	if (ins = "AMERICHOICE DME II"){
 		return "Americhoice"
@@ -265,8 +278,6 @@ Dash1()
 	
 	if elig
 		Gui, Add, Link,, Eligibility - <a href="%elig%">Click</a>
-	if auth
-		Gui, Add, Link,, Auth - <a href="%auth%">Click</a>`n
 	if altelig
 		Gui, Add, Link,, Alt Eligibility - <a href="%altelig%">Click</a>
 	
@@ -479,7 +490,12 @@ Save()
 	saveFile := "`n"
 	
 	for index, value in record{
-		saveFile := saveFile . value . ","
+		if (index = 15) {
+			saveFile := saveFile . value . "`n"
+		}
+		Else {
+			saveFile := saveFile . value . ","
+		}
 	}
 	
 	try
@@ -637,12 +653,6 @@ LoadPatient(LoadFile)
 
 ; HOTKEYS
 
-+!^i::
-{
-	PostMessage, 0x001C, 003305D4, 0, , CPR+ Equipment Manager
-
-}
-
 +!i:: ;INVENTORY CHECK
 {	
 	;sn := "ad16I14124"
@@ -746,9 +756,9 @@ LoadPatient(LoadFile)
 {
 	if %dos%
 	{
-		#IfWinActive, ahk_exe cpr.exe
-		Send {F11}
-		#IfWinActive
+		#IfWinNotActive, ahk_class MozillaWindowClass
+			Send {F11}
+		#IfWinNotActive
 		SendInput %dos%
 		Send {Enter}
 	}
@@ -762,9 +772,9 @@ LoadPatient(LoadFile)
 {
 	if %dob%
 	{
-		#IfWinActive, ahk_exe cpr.exe
-		Send {F11}
-		#IfWinActive
+		#IfWinNotActive, ahk_class MozillaWindowClass
+			Send {F11}
+		#IfWinNotActive
 		SendInput %dob%
 		Send {Enter}
 	}
@@ -792,7 +802,7 @@ LoadPatient(LoadFile)
 	if %ph%
 	{
 		#IfWinActive, ahk_exe cpr.exe
-		Send {F11}
+			Send {F11}
 		#IfWinActive
 		SendInput %ph%
 	}
@@ -985,5 +995,10 @@ DesktopScreenCoordinates(byref Xmin, byref Ymin, byref Xmax, byref Ymax)
 
 ;; GLOBALS ;;
 ::phy::Physician
-
+::tod::
+{
+	FormatTime, today, A_Now, shortdate
+	SendInput % today
+	Return
+}
 ^`:: ExitApp
